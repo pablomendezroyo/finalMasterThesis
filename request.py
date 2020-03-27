@@ -42,7 +42,7 @@ def get_request():
 
     response = requests.get(url)
     data = response.json()
-    print(data)
+    #print(data)
     return data
 
 def parse_json(dict_file):
@@ -53,13 +53,21 @@ def parse_json(dict_file):
         if(k1 == 'included'):
             for i in v1:
                 print(i)
-                for k2, v2 in i.items():
-                    if(k2 == 'attributes'):
-                        for k3, v3 in v2.items():
-                            print(k3)
-                            if(k3 == 'values'):
-                                for j in v3:
-                                    print(j)
+                a = False
+                for k3, v3 in i.items():
+                    if((k3 == 'type') and (v3 == 'Precio mercado spot (€/MWh)')):
+                        print(k3,v3)
+                        a = True
+                    elif((k3 == 'type') and (v3 != 'Precio mercado spot (€/MWh)')):
+                        a = False
+                    if (a == True and k3 == 'attributes'):
+                        for k4, v4 in v3.items():
+                            if(k4 == 'values'):
+                                print(v4)
+                                for j in v4:
+                                    for k5, v5 in j.items():
+                                        if(k5 == 'value'):
+                                            print(v5)
 
         
 response = get_request()
