@@ -68,38 +68,47 @@ contract EnergySmartContract {
     }
     
     function matchSeller(address _buyer, uint _amount_kw, uint _price_max_kwh) public {
-        //bool status;
         for(uint i = 0; i < Offers_Seller_Array.length; i++){
-                if(_amount_kw <= Offers_Seller_Array[i].amount_max_kw && _amount_kw >= Offers_Seller_Array[i].amount_min_kw && _price_max_kwh > Offers_Seller_Array[i].price_min_kwh){
-                    withdrawMoney(Offers_Seller_Array[i].addressSeller, _buyer, 0.001 ether);
-                    //status = true;
-                    //emit matchFound(status);
-                    //return status;
+                if(_amount_kw <= Offers_Seller_Array[i].amount_max_kw 
+                && _amount_kw >= Offers_Seller_Array[i].amount_min_kw 
+                && _price_max_kwh >= Offers_Seller_Array[i].price_min_kwh){
+                    withdrawMoney(
+                        Offers_Seller_Array[i].addressSeller,
+                        _buyer,
+                        10**18*_amount_kw*Offers_Seller_Array[i].price_min_kwh,
+                        i);
                 }
             }
-        //emit matchFound(status);
-        //return status;
     }
     
     function matchBuyer(address payable _seller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public {
-        //bool status;
         for(uint i = 0; i < Offers_Buyer_Array.length; i++){
-                if(_amount_min_kw <= Offers_Buyer_Array[i].amount_kw && _amount_max_kw >= Offers_Buyer_Array[i].amount_kw && _price_min_kwh < Offers_Buyer_Array[i].amount_kw){
-                    withdrawMoney(_seller, Offers_Buyer_Array[i].addressBuyer, 0.001 ether);
-                    //status = true;
-                    //emit matchFound(status);
-                    //return status;
+                if(_amount_min_kw <= Offers_Buyer_Array[i].amount_kw 
+                && _amount_max_kw >= Offers_Buyer_Array[i].amount_kw 
+                && _price_min_kwh <= Offers_Buyer_Array[i].price_max_kwh){
+                    withdrawMoney(
+                        _seller,
+                        Offers_Buyer_Array[i].addressBuyer,
+                        10**18*Offers_Buyer_Array[i].amount_kw*_price_min_kwh,
+                        50);
                 }
             }
-        //emit matchFound(status);
-        //return status;
     }
     
-    function withdrawMoney(address payable _to, address _from, uint _amount) internal {
+    function withdrawMoney(address payable _to, address _from, uint _amount, uint _index) internal {
         require(_amount <= balanceReceived[_from].totalBalance, "You don´t have enough ether");
         assert(balanceReceived[_from].totalBalance >= balanceReceived[_from].totalBalance - _amount);
         balanceReceived[_from].totalBalance -= _amount;
         _to.transfer(_amount);
+        if(_index != 50){
+            delete Offers_Seller_Array[_index];
+        } else if(_index == 50){
+            delete Offers_Seller_Array[Offers_Seller_Array.length-1];
+        }
+    }
+    
+    function convertWeiToEther(uint _amountInWei) public pure returns(uint){
+        return _amountInWei / 1 ether;
     }
     
 }
