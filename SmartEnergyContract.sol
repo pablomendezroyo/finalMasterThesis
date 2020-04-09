@@ -3,7 +3,7 @@ pragma solidity ^0.6.4;
 contract EnergySmartContract {
     
     struct OfferSeller{
-        address addressSeller;
+        address payable addressSeller;
         uint amount_min_kw;
         uint amount_max_kw;
         uint price_min_kwh;
@@ -46,14 +46,14 @@ contract EnergySmartContract {
         balanceReceived[msg.sender].numPayments ++;
     }
     
-    function setSeller(address _addressSeller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public {
+    function setSeller(address payable _addressSeller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public {
         seller[msg.sender].addressSeller = _addressSeller;
         seller[msg.sender].amount_min_kw = _amount_min_kw;
         seller[msg.sender].amount_max_kw = _amount_max_kw;
         seller[msg.sender].price_min_kwh = _price_min_kwh;
        
         Offers_Seller_Array.push(OfferSeller({addressSeller: _addressSeller, amount_min_kw: _amount_min_kw, amount_max_kw: _amount_max_kw, price_min_kwh: _price_min_kwh}));
-        //matchBuyer();
+        matchBuyer(_addressSeller, _amount_min_kw, _amount_max_kw, _price_min_kwh);
     }
     
     function setBuyer(address _addressBuyer, uint _amount_kw, uint _price_max_kwh) public {
@@ -64,29 +64,42 @@ contract EnergySmartContract {
         buyer[msg.sender].price_max_kwh = _price_max_kwh;
         
         Offers_Buyer_Array.push(OfferBuyer({addressBuyer: _addressBuyer, amount_kw: _amount_kw, price_max_kwh: _price_max_kwh}));
-        matchSeller(_amount_kw, _price_max_kwh);
+        matchSeller(_addressBuyer, _amount_kw, _price_max_kwh);
     }
     
-    function matchSeller(uint _amount_kw, uint _price_max_kwh) public returns(bool){
-        bool status;
+    function matchSeller(address _buyer, uint _amount_kw, uint _price_max_kwh) public returns(bool){
+        //bool status;
         for(uint i = 0; i < Offers_Seller_Array.length; i++){
                 if(_amount_kw <= Offers_Seller_Array[i].amount_max_kw && _amount_kw >= Offers_Seller_Array[i].amount_min_kw && _price_max_kwh > Offers_Seller_Array[i].price_min_kwh){
-                    status = true;
-                    emit matchFound(status);
-                    return status;
+                    withdrawMoney(Offers_Seller_Array[i].addressSeller, _buyer, 2);
+                    //status = true;
+                    //emit matchFound(status);
+                    //return status;
                 }
             }
-        emit matchFound(status);
-        return status;
+        //emit matchFound(status);
+        //return status;
     }
     
-    /*function matchBuyer() public view returns(bool){
+    function matchBuyer(address payable _seller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public returns(bool){
+        //bool status;
         for(uint i = 0; i < Offers_Buyer_Array.length; i++){
-                if(Offers_Buyer_Array[i].){
-                    
+                if(_amount_min_kw <= Offers_Buyer_Array[i].amount_kw && _amount_max_kw >= Offers_Buyer_Array[i].amount_kw && _price_min_kwh < Offers_Buyer_Array[i].amount_kw){
+                    withdrawMoney(_seller, Offers_Buyer_Array[i].addressBuyer, 2);
+                    //status = true;
+                    //emit matchFound(status);
+                    //return status;
                 }
             }
-            return false;
-    }*/
+        //emit matchFound(status);
+        //return status;
+    }
+    
+    function withdrawMoney(address payable _to, address _from, uint _amount) internal {
+        require(_amount <= balanceReceived[_from].totalBalance, "You don´t have enough ether");
+        assert(balanceReceived[_from].totalBalance >= balanceReceived[_from].totalBalance - _amount);
+        balanceReceived[_from].totalBalance -= _amount;
+        _to.transfer(_amount);
+    }
     
 }
