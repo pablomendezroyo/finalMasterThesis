@@ -86,7 +86,7 @@ contract EnergySmartContract {
                 && _price_min_kwh <= Offers_Buyer_Array[i].price_max_kwh){
                     withdrawMoney(_seller, Offers_Buyer_Array[i].addressBuyer, 10**18*Offers_Buyer_Array[i].amount_kw*_price_min_kwh);
                     deleteBuyer(i);
-                    deleteBuyer(Offers_Seller_Array.length-1);
+                    deleteSeller(Offers_Seller_Array.length-1);
                 }
             }
     }
