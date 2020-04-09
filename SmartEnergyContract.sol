@@ -67,7 +67,7 @@ contract EnergySmartContract {
         matchSeller(_addressBuyer, _amount_kw, _price_max_kwh);
     }
     
-    function matchSeller(address _buyer, uint _amount_kw, uint _price_max_kwh) public returns(bool){
+    function matchSeller(address _buyer, uint _amount_kw, uint _price_max_kwh) public {
         //bool status;
         for(uint i = 0; i < Offers_Seller_Array.length; i++){
                 if(_amount_kw <= Offers_Seller_Array[i].amount_max_kw && _amount_kw >= Offers_Seller_Array[i].amount_min_kw && _price_max_kwh > Offers_Seller_Array[i].price_min_kwh){
@@ -81,7 +81,7 @@ contract EnergySmartContract {
         //return status;
     }
     
-    function matchBuyer(address payable _seller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public returns(bool){
+    function matchBuyer(address payable _seller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) public {
         //bool status;
         for(uint i = 0; i < Offers_Buyer_Array.length; i++){
                 if(_amount_min_kw <= Offers_Buyer_Array[i].amount_kw && _amount_max_kw >= Offers_Buyer_Array[i].amount_kw && _price_min_kwh < Offers_Buyer_Array[i].amount_kw){
