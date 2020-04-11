@@ -105,7 +105,7 @@ contract EnergySmartContract {
                 }
             }
         if(matched == true){
-            withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, 10**18*Offers_Buyer_Array[j].amount_kw*_price_min_kwh);
+            withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, 10**18*Offers_Buyer_Array[j].amount_kw*Offers_Buyer_Array[j].price_max_kwh);
             deleteBuyer(j);
             deleteSeller(Offers_Seller_Array.length - 1);
         }
