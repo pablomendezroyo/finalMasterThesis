@@ -68,27 +68,47 @@ contract EnergySmartContract {
     }
     
     function matchSeller(address _buyer, uint _amount_kw, uint _price_max_kwh) internal {
+        bool matched;
+        uint j;
         for(uint i = 0; i < Offers_Seller_Array.length; i++){
                 if(_amount_kw <= Offers_Seller_Array[i].amount_max_kw 
                 && _amount_kw >= Offers_Seller_Array[i].amount_min_kw 
                 && _price_max_kwh >= Offers_Seller_Array[i].price_min_kwh){
-                    withdrawMoney(Offers_Seller_Array[i].addressSeller, _buyer, 10**18*_amount_kw*Offers_Seller_Array[i].price_min_kwh);
-                    deleteSeller(i);
-                    deleteBuyer(Offers_Buyer_Array.length-1);
+                    if(j == 0){
+                        matched = true;
+                        j = i;
+                    }else if(Offers_Seller_Array[i].price_min_kwh < Offers_Seller_Array[j].price_min_kwh){
+                        j = i;
+                    }
                 }
             }
+        if(matched == true){
+            withdrawMoney(Offers_Seller_Array[j].addressSeller, _buyer, 10**18*_amount_kw*Offers_Seller_Array[j].price_min_kwh);
+            deleteSeller(j);
+            deleteBuyer(Offers_Buyer_Array.length-1);
+        }
     }
     
     function matchBuyer(address payable _seller, uint _amount_min_kw, uint _amount_max_kw, uint _price_min_kwh) internal {
+        bool matched;
+        uint j;
         for(uint i = 0; i < Offers_Buyer_Array.length; i++){
                 if(_amount_min_kw <= Offers_Buyer_Array[i].amount_kw 
                 && _amount_max_kw >= Offers_Buyer_Array[i].amount_kw 
                 && _price_min_kwh <= Offers_Buyer_Array[i].price_max_kwh){
-                    withdrawMoney(_seller, Offers_Buyer_Array[i].addressBuyer, 10**18*Offers_Buyer_Array[i].amount_kw*_price_min_kwh);
-                    deleteBuyer(i);
-                    deleteSeller(Offers_Seller_Array.length-1);
+                    if(j == 0){
+                        matched = true;
+                        j = i;
+                    }else if(Offers_Buyer_Array[i].price_max_kwh > Offers_Buyer_Array[j].price_max_kwh){
+                        j = i;
+                    }
                 }
             }
+        if(matched == true){
+            withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, 10**18*Offers_Buyer_Array[j].amount_kw*_price_min_kwh);
+            deleteBuyer(j);
+            deleteSeller(Offers_Seller_Array.length-1);
+        }
     }
     
     function withdrawMoney(address payable _to, address _from, uint _amount) internal {
