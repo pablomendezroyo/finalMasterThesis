@@ -85,7 +85,7 @@ contract EnergySmartContract {
         if(matched == true){
             withdrawMoney(Offers_Seller_Array[j].addressSeller, _buyer, 10**18*_amount_kw*Offers_Seller_Array[j].price_min_kwh);
             deleteSeller(j);
-            deleteBuyer(Offers_Buyer_Array.length-1);
+            deleteBuyer(Offers_Buyer_Array.length);
         }
     }
     
@@ -107,7 +107,7 @@ contract EnergySmartContract {
         if(matched == true){
             withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, 10**18*Offers_Buyer_Array[j].amount_kw*_price_min_kwh);
             deleteBuyer(j);
-            deleteSeller(Offers_Seller_Array.length-1);
+            deleteSeller(Offers_Seller_Array.length);
         }
     }
     
@@ -119,11 +119,26 @@ contract EnergySmartContract {
     }
     
     function deleteSeller(uint _index) internal{
-        delete Offers_Seller_Array[_index];
+        //delete Offers_Seller_Array[_index];
+        Offers_Seller_Array[_index].addressSeller = Offers_Seller_Array[Offers_Seller_Array.length].addressSeller;
+        Offers_Seller_Array[_index].amount_min_kw = Offers_Seller_Array[Offers_Seller_Array.length].amount_min_kw;
+        Offers_Seller_Array[_index].amount_max_kw = Offers_Seller_Array[Offers_Seller_Array.length].amount_max_kw;
+        Offers_Seller_Array[_index].price_min_kwh = Offers_Seller_Array[Offers_Seller_Array.length].price_min_kwh;
+        
+        if(Offers_Seller_Array.length > 1){
+            Offers_Seller_Array.pop();
+        }
     }
     
     function deleteBuyer(uint _index) internal{
-        delete Offers_Buyer_Array[_index];
+        //delete Offers_Buyer_Array[_index];
+        Offers_Buyer_Array[_index].addressBuyer = Offers_Buyer_Array[Offers_Buyer_Array.length].addressBuyer;
+        Offers_Buyer_Array[_index].amount_kw = Offers_Buyer_Array[Offers_Buyer_Array.length].amount_kw;
+        Offers_Buyer_Array[_index].price_max_kwh = Offers_Buyer_Array[Offers_Buyer_Array.length].price_max_kwh;
+        
+        if(Offers_Buyer_Array.length > 1){
+            Offers_Buyer_Array.pop();
+        }
     }
     
     function convertWeiToEther(uint _amountInWei) public pure returns(uint){
