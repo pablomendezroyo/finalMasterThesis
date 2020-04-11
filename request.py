@@ -12,7 +12,7 @@ class Transaction:
         self.price = self.parse_json(self.request)
         #self.transaction = [ self.number, self.request, self.price]
     def __str__(self):
-        return "Transaction: {}, {}, {}".format(self.start_date, self.end_date, self.price)
+        return "TRANSACTION: start_date: {}, end_date: {}, price PVPC: {}".format(self.start_date, self.end_date, self.price)
 
 
     def get_current_time(self):
