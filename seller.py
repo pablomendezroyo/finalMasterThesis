@@ -3,7 +3,7 @@ from request import Request
 class Seller:
     
     # batteryLevel
-    def __init__(self):
+    def __init__(self, batteryLevel):
         self.amount_min_kw, self.amount_max_kw = self.set_amounts() 
         self.price_min_kwh = self.set_Price()
 

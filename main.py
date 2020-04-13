@@ -1,4 +1,4 @@
-
+import time
 
 from seller import Seller
 from buyer import Buyer
@@ -11,11 +11,13 @@ while(1):
 
     if(battery_level < battery_level_min):
         buyer = Buyer(battery_level)
-        set_Buyer(buyer)
+        set_Buyer(buyer.amount_kw, buyer.price_max_kwh)
+
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
-        set_Seller(seller)
+        set_Seller(seller.amount_min_kw, seller.amount_mak_kw, seller.price_min_kwh)
+
     else:
         pass
     
-    #sleep(10)
+    time.sleep(30)

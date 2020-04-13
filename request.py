@@ -12,7 +12,6 @@ class Request:
     def __str__(self):
         return "TRANSACTION: start_date: {}, end_date: {}, price PVPC: {}".format(self.start_date, self.end_date, self.price)
 
-
     def get_current_time(self):
 
         # datetime object containing current date and time

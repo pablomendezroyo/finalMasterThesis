@@ -19,17 +19,23 @@ contract = web3.eth.contract(address = address_contract, abi = abi)
 def set_Seller():
     nonce1 = web3.eth.getTransactionCount(address_account_1)
 
-    transaction_setSeller = contract.functions.setSeller(
+    construct_txn = contract.functions.setSeller(
         1, 3, 2).buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
             'from': address_account_1,
             'nonce': nonce1
         })
-    print(transaction_setSeller)
-    signed_txn = web3.eth.account.signTransaction(transaction_setSeller, private_key=private_key_1)
-    web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    
+    signed_txn = web3.eth.account.signTransaction(construct_txn, private_key=private_key_1)
+    tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+
+    print(construct_txn)
     print(signed_txn)
+    print(tx_receipt)
+
+    return tx_receipt
 
 # SET MONEY
 def set_Money(amount):
@@ -42,29 +48,39 @@ def set_Money(amount):
             'from': address_account_1,
             'nonce': nonce
         })
-    print(construct_txn)
+    
     signed_txn = web3.eth.account.signTransaction(construct_txn, private_key=private_key_1)
     tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
     tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+
+    print(construct_txn)
     print(signed_txn)
-    return signed_txn
+    print(tx_receipt)
+
+    return tx_receipt
 
 
 # SET BUYER
 def set_Buyer(amount_kw, price_max_kwh):
     nonce = web3.eth.getTransactionCount(address_account_1)
 
-    transaction_setBuyer = contract.functions.setBuyer(
+    construct_txn = contract.functions.setBuyer(
         amount_kw, price_max_kwh).buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
             'from': address_account_1,
             'nonce': nonce
         })
-    print(transaction_setBuyer)
-    signed_txn = web3.eth.account.signTransaction(transaction_setBuyer, private_key=private_key_1)
-    web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    
+    signed_txn = web3.eth.account.signTransaction(construct_txn, private_key=private_key_1)
+    tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+    
+    print(construct_txn)
     print(signed_txn)
+    print(tx_receipt)
+
+    return tx_receipt
 
 # PRINT BALANCES
 def get_balance():
