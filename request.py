@@ -2,15 +2,13 @@ import requests
 from datetime import datetime
 import json
 
-class Transaction:
+class Request:
 
-    def __init__(self, number):
-        self.number = number
-        
+    def __init__(self):
         self.start_date, self.end_date = self.get_current_time()
         self.request = self.get_request(self.start_date, self.end_date)
         self.price = self.parse_json(self.request)
-        #self.transaction = [ self.number, self.request, self.price]
+
     def __str__(self):
         return "TRANSACTION: start_date: {}, end_date: {}, price PVPC: {}".format(self.start_date, self.end_date, self.price)
 
@@ -81,11 +79,10 @@ class Transaction:
                                                 #self.items.append(v5)
                                                 return v5
 
-transaction1 = Transaction(1)
+def main():
+    transaction1 = Request()
+    print(transaction1)
+    print(transaction1.price)
 
-print(transaction1)
-
-
-
-#response = get_request()
-#parse_json(response)
+if __name__ == '__main__':
+    main()
