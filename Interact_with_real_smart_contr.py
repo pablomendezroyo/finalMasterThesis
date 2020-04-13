@@ -15,58 +15,62 @@ private_key_2 = "530C781BF8682172AA10C2A81CF9D9AE5E97CF99254550DAE0BB4DBECD6ED14
 
 contract = web3.eth.contract(address = address_contract, abi = abi)
 
-'''# SET SELLER
-nonce1 = web3.eth.getTransactionCount(address_account_1)
+# SET SELLER
+def set_Seller():
+    nonce1 = web3.eth.getTransactionCount(address_account_1)
 
-transaction_setSeller = contract.functions.setSeller(
-    1, 3, 2).buildTransaction({
-        'gas': 1000000,
-        'gasPrice': web3.toWei('1', 'gwei'),
-        'from': address_account_1,
-        'nonce': nonce1
-    })
-print(transaction_setSeller)
-signed_txn = web3.eth.account.signTransaction(transaction_setSeller, private_key=private_key_1)
-web3.eth.sendRawTransaction(signed_txn.rawTransaction)
-print(signed_txn)'''
+    transaction_setSeller = contract.functions.setSeller(
+        1, 3, 2).buildTransaction({
+            'gas': 1000000,
+            'gasPrice': web3.toWei('1', 'gwei'),
+            'from': address_account_1,
+            'nonce': nonce1
+        })
+    print(transaction_setSeller)
+    signed_txn = web3.eth.account.signTransaction(transaction_setSeller, private_key=private_key_1)
+    web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    print(signed_txn)
 
-'''# SET MONEY
-nonce2 = web3.eth.getTransactionCount(address_account_2)
+# SET MONEY
+def set_Money():
+    nonce2 = web3.eth.getTransactionCount(address_account_2)
 
-transaction_sendMoney = contract.functions.sendMoney().buildTransaction({
-        'gas': 1000000,
-        'gasPrice': web3.toWei('1', 'gwei'),
-        'value': web3.toWei(0.1, 'ether'),
-        'from': address_account_2,
-        'nonce': nonce2
-    })
-print(transaction_sendMoney)
-signed_txn = web3.eth.account.signTransaction(transaction_sendMoney, private_key=private_key_2)
-web3.eth.sendRawTransaction(signed_txn.rawTransaction)
-print(signed_txn)'''
+    transaction_sendMoney = contract.functions.sendMoney().buildTransaction({
+            'gas': 1000000,
+            'gasPrice': web3.toWei('1', 'gwei'),
+            'value': web3.toWei(0.1, 'ether'),
+            'from': address_account_2,
+            'nonce': nonce2
+        })
+    print(transaction_sendMoney)
+    signed_txn = web3.eth.account.signTransaction(transaction_sendMoney, private_key=private_key_2)
+    web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    print(signed_txn)
 
 
-'''# SET BUYER
-nonce2 = web3.eth.getTransactionCount(address_account_2)
+# SET BUYER
+def set_Buyer():
+    nonce2 = web3.eth.getTransactionCount(address_account_2)
 
-transaction_setBuyer = contract.functions.setBuyer(
-    2, 3).buildTransaction({
-        'gas': 1000000,
-        'gasPrice': web3.toWei('1', 'gwei'),
-        'from': address_account_2,
-        'nonce': nonce2
-    })
-print(transaction_setBuyer)
-signed_txn = web3.eth.account.signTransaction(transaction_setBuyer, private_key=private_key_2)
-web3.eth.sendRawTransaction(signed_txn.rawTransaction)
-print(signed_txn)'''
+    transaction_setBuyer = contract.functions.setBuyer(
+        2, 3).buildTransaction({
+            'gas': 1000000,
+            'gasPrice': web3.toWei('1', 'gwei'),
+            'from': address_account_2,
+            'nonce': nonce2
+        })
+    print(transaction_setBuyer)
+    signed_txn = web3.eth.account.signTransaction(transaction_setBuyer, private_key=private_key_2)
+    web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    print(signed_txn)
 
 # PRINT BALANCES
-variable = contract.functions.getBalance().call()
-balance_1 = web3.eth.getBalance(address_account_1)
-balance_2 = web3.eth.getBalance(address_account_2)
+def get_balance():
+    variable = contract.functions.getBalance().call()
+    balance_1 = web3.eth.getBalance(address_account_1)
+    balance_2 = web3.eth.getBalance(address_account_2)
 
-print("The balance of account 1 is: ", web3.fromWei(balance_1, "ether"))
-print("The balance of account 2 is: ", web3.fromWei(balance_2, "ether"))
-print(variable)
+    print("The balance of account 1 is: ", web3.fromWei(balance_1, "ether"))
+    print("The balance of account 2 is: ", web3.fromWei(balance_2, "ether"))
+    print(variable)
 

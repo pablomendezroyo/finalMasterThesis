@@ -1,6 +1,8 @@
 from request import Request
 
 class Buyer:
+
+    # batteryLevel
     def __init__(self):
         self.amount_kw =self.set_Amount()
         self.price_max_kwh = self.set_Price()
