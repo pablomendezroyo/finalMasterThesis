@@ -1,6 +1,9 @@
 pragma solidity ^0.6.4;
 
 contract EnergySmartContract {
+    
+    event transactionDone(address indexed _buyer, address indexed _seller, uint _amount_kw, uint _price);
+    
     struct OfferSeller{
         address payable addressSeller;
         uint amount_min_kw;
@@ -73,7 +76,8 @@ contract EnergySmartContract {
                 }
             }
         if(matched == true){
-            withdrawMoney(Offers_Seller_Array[j].addressSeller, _buyer, 10**18*_amount_kw*Offers_Seller_Array[j].price_min_kwh);
+            //10**18*
+            withdrawMoney(Offers_Seller_Array[j].addressSeller, _buyer, _amount_kw*Offers_Seller_Array[j].price_min_kwh, _amount_kw);
             deleteSeller(j);
             deleteBuyer(Offers_Buyer_Array.length - 1);
         }
@@ -94,16 +98,18 @@ contract EnergySmartContract {
                 }
             }
         if(matched == true){
-            withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, 10**18*Offers_Buyer_Array[j].amount_kw*Offers_Buyer_Array[j].price_max_kwh);
+            //10**18
+            withdrawMoney(_seller, Offers_Buyer_Array[j].addressBuyer, Offers_Buyer_Array[j].amount_kw*Offers_Buyer_Array[j].price_max_kwh, Offers_Buyer_Array[j].amount_kw);
             deleteBuyer(j);
             deleteSeller(Offers_Seller_Array.length - 1);
         }
     }
-    function withdrawMoney(address payable _to, address _from, uint _amount) internal {
-        require(_amount <= balanceReceived[_from].totalBalance, "You don´t have enough ether");
-        assert(balanceReceived[_from].totalBalance >= balanceReceived[_from].totalBalance - _amount);
-        balanceReceived[_from].totalBalance -= _amount;
-        _to.transfer(_amount);
+    function withdrawMoney(address payable _to, address _from, uint _amount_euros, uint _amount_kw) internal {
+        require(_amount_euros <= balanceReceived[_from].totalBalance, "You don´t have enough ether");
+        assert(balanceReceived[_from].totalBalance >= balanceReceived[_from].totalBalance - _amount_euros);
+        balanceReceived[_from].totalBalance -= _amount_euros;
+        _to.transfer(_amount_euros);
+        emit transactionDone(_from, _to, _amount_kw, _amount_euros);
     }
     function deleteSeller(uint _index) internal{
         delete Offers_Seller_Array[_index];
