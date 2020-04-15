@@ -1,4 +1,6 @@
 from request import Request
+from config import address_account_1, private_key_1
+
 
 class Seller:
     

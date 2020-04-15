@@ -1,5 +1,6 @@
 from request import Request
 from Interact_with_real_smart_contr import set_Money, get_balance_received
+from config import address_account_1, private_key_1
 
 class Buyer:
 
