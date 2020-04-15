@@ -117,7 +117,7 @@ def listen_to_events():
             # First item is transaction hash, Second is the buyer, Third is the seller
             "topics": [None, "0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3", None]})
         print(event_filter)
-        event_list = event_filter.get_new_entries()
+        event_list = event_filter.get_all_entries()
         print(event_list)
         time.sleep(10)
 
