@@ -1,5 +1,6 @@
 import json
 from web3 import Web3
+from config import address_account_1, address_account_2, private_key_1, private_key_2
 
 #infura_url = "https://goerli.infura.io/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
 websocket = "wss://goerli.infura.io/ws/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
@@ -11,16 +12,16 @@ web3 = Web3(Web3.WebsocketProvider(websocket))
 
 # CONTRACT
 abi = json.loads('[	{		"anonymous": false,		"inputs": [			{				"indexed": false,				"internalType": "bool",				"name": "_status",				"type": "bool"			}		],		"name": "matchFound",		"type": "event"	},	{		"inputs": [],		"name": "sendMoney",		"outputs": [],		"stateMutability": "payable",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_price_max_kwh",				"type": "uint256"			}		],		"name": "setBuyer",		"outputs": [],		"stateMutability": "nonpayable",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_price_min_kwh",				"type": "uint256"			}		],		"name": "setSeller",		"outputs": [],		"stateMutability": "nonpayable",		"type": "function"	},	{		"anonymous": false,		"inputs": [			{				"indexed": true,				"internalType": "address",				"name": "_buyer",				"type": "address"			},			{				"indexed": true,				"internalType": "address",				"name": "_seller",				"type": "address"			},			{				"indexed": false,				"internalType": "uint256",				"name": "_amount_kw",				"type": "uint256"			},			{				"indexed": false,				"internalType": "uint256",				"name": "_price",				"type": "uint256"			}		],		"name": "transactionDone",		"type": "event"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "balanceReceived",		"outputs": [			{				"internalType": "uint256",				"name": "totalBalance",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "numPayments",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "buyer",		"outputs": [			{				"internalType": "address",				"name": "addressBuyer",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_max_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amountInWei",				"type": "uint256"			}		],		"name": "convertWeiToEther",		"outputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"stateMutability": "pure",		"type": "function"	},	{		"inputs": [],		"name": "getBalance",		"outputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"name": "Offers_Buyer_Array",		"outputs": [			{				"internalType": "address",				"name": "addressBuyer",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_max_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"name": "Offers_Seller_Array",		"outputs": [			{				"internalType": "address payable",				"name": "addressSeller",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_min_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "seller",		"outputs": [			{				"internalType": "address payable",				"name": "addressSeller",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_min_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	}]')
-address_contract = "0x032EBEcdf8dF6eec6c5bCEcc1D3E436EA7271075"
+address_contract = "0x6921782848a4C6fe284b5Fc446F5185cF0e9fDf1"
 
 contract = web3.eth.contract(address = address_contract, abi = abi)
 
 # SET SELLER
-def set_Seller(_address_account, _private_key):
+def set_Seller(_address_account, _private_key, _amount_min_kw, _amount_max_kw, _price_min_kwh):
     nonce1 = web3.eth.getTransactionCount(_address_account)
 
     construct_txn = contract.functions.setSeller(
-        1, 3, 2).buildTransaction({
+        _amount_min_kw, _amount_max_kw, _price_min_kwh).buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
             'from': _address_account,
@@ -61,11 +62,11 @@ def set_Money(_address_account, _private_key, amount):
 
 
 # SET BUYER
-def set_Buyer(_address_account, _private_key, amount_kw, price_max_kwh):
+def set_Buyer(_address_account, _private_key, _amount_kw, _price_max_kwh):
     nonce = web3.eth.getTransactionCount(_address_account)
 
     construct_txn = contract.functions.setBuyer(
-        amount_kw, price_max_kwh).buildTransaction({
+        _amount_kw, _price_max_kwh).buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
             'from': _address_account,
@@ -101,13 +102,17 @@ def get_balance_received(_address_account):
     balance_received_wei = balance_received_list[0]
     balance_received_ether = web3.fromWei(balance_received_wei, "ether")
     num_payments = balance_received_list[1]
-    return balance_received_ether
+    return balance_received_wei
 
 
 ## EVENTS ##
 def listen_to_events():
 
-    event_filter = web3.eth.filter({"fromBlock": 2523494 , "toBlock": 2523494, "address": address_contract})
+    event_filter = web3.eth.filter({
+        "fromBlock": 2528900 , 
+        "toBlock": 'latest', 
+        "address": address_contract, 
+        "topics": [None, "0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3", None]})
     print(event_filter)
     event_list = event_filter.get_all_entries()
     print(event_list)
@@ -115,8 +120,7 @@ def listen_to_events():
 
 ## MAIN ##
 def main(): 
-    contract_balance = get_balance_account()
-    print(contract_balance)
+    listen_to_events()
     
 
 if __name__ == '__main__':
