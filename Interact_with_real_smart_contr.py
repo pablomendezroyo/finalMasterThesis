@@ -114,7 +114,7 @@ def listen_to_events():
             "fromBlock": from_block, 
             "toBlock": 'latest', 
             "address": address_contract, 
-            # First item is transaction hash, Second is the buyer, Third is the seller
+            # First item is the hash of event name, Second is the buyer, Third is the seller
             "topics": [None, "0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3", None]})
         print(event_filter)
         event_list = event_filter.get_all_entries()
@@ -128,7 +128,10 @@ def get_latest_block():
 
 ## MAIN ##
 def main(): 
-    listen_to_events()
+    an_integer = int(address_account_1, 16)
+    hex_value = hex(an_integer)
+    print(hex_value)
+    print(Web3.toHex(primitive=None, hexstr=hex_value, text=None))
     
 
 if __name__ == '__main__':
