@@ -44,7 +44,7 @@ def set_Money(_address_account, _private_key, amount):
     construct_txn = contract.functions.sendMoney().buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
-            'value': web3.toWei(amount, 'ether'),
+            'value': web3.toWei(amount, 'wei'),
             'from': _address_account,
             'nonce': nonce
         })

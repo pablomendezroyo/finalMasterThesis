@@ -23,13 +23,13 @@ class Buyer:
         return amount
 
     def _get_balance(self):
-        balance = get_balance_received()
+        balance = get_balance_received(address_account_1)
         print("current balance: ", balance)
-        print(self.amount_kw*self.price_max_kwh)
+        print(address_account_1, private_key_1, self.amount_kw*self.price_max_kwh)
         if(balance < self.amount_kw*self.price_max_kwh):
             set_Money(self.amount_kw*self.price_max_kwh - float(balance))
-            updated_balance = get_balance_received()
-            print("updated balance: ",updated_balance)
+            updated_balance = get_balance_received(address_account_1)
+            print("updated balance: ", updated_balance)
             return updated_balance
         elif(balance >= self.amount_kw*self.price_max_kwh):
             print("current balance: ", balance)
