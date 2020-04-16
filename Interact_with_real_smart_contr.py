@@ -1,7 +1,7 @@
 import json
 import time
 from web3 import Web3
-from config import address_account_1, address_account_2, private_key_1, private_key_2
+from config import address_account_1, address_account_2, private_key_1, private_key_2, topic_account_1, topic_account_2
 
 #infura_url = "https://goerli.infura.io/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
 websocket = "wss://goerli.infura.io/ws/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
@@ -107,18 +107,39 @@ def get_balance_received(_address_account):
 
 
 ## EVENTS ##
-def listen_to_events():
-    from_block = get_latest_block()
+def listen_to_events(_topic_buyer, _topic_seller):
+    #from_block = get_latest_block()
+    from_block = 2529814
     while(1):
         event_filter = web3.eth.filter({
             "fromBlock": from_block, 
             "toBlock": 'latest', 
             "address": address_contract, 
             # First item is the hash of event name, Second is the buyer, Third is the seller
-            "topics": [None, "0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3", None]})
+            "topics": [None, _topic_buyer, _topic_seller]})
         print(event_filter)
         event_list = event_filter.get_all_entries()
         print(event_list)
+        if(len(event_list) > 0):
+            print("NEW EVENT")
+            for k1, v1 in event_list[0].items():
+                if(k1 == 'data'):
+                    print("length of v1: ", len(v1))
+                    amount_kw = int(v1[:66], 16)
+                    print(amount_kw)
+                    total_money = int(v1[67:], 16)
+                    print(total_money)
+                
+                if(k1 == 'topics'):
+                    topic_buyer = v1[1].hex()
+                    topic_seller = v1[2].hex()
+            
+            if(_topic_buyer == topic_buyer or _topic_seller == topic_seller):
+                print("EVENT FOUND!")
+                return amount_kw, total_money
+                    
+        elif(len(event_list) == 0):
+            print("NO NEW EVENTS YET")
         time.sleep(10)
 
 def get_latest_block():
@@ -128,10 +149,8 @@ def get_latest_block():
 
 ## MAIN ##
 def main(): 
-    an_integer = int(address_account_1, 16)
-    hex_value = hex(an_integer)
-    print(hex_value)
-    print(Web3.toHex(primitive=None, hexstr=hex_value, text=None))
+    amount_kw, total_money = listen_to_events(None,topic_account_2)
+    print("Amount kw: {}, total money: {}".format(amount_kw, total_money))
     
 
 if __name__ == '__main__':

@@ -6,6 +6,9 @@ address_account_3_ganache = "0x9Aa27C82Ef7e81a7a91C295dda3296189bBf5ec5"
 address_account_1 = "0x61D38805c04C8cb9b5D71bdAfaD874Fa2ac091D3"
 address_account_2 = "0x4B165B929Aa5120e6848a9d0d742faD0929e80b5"
 
+topic_account_1 = "0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3"
+topic_account_2 = "0x0000000000000000000000004b165b929aa5120e6848a9d0d742fad0929e80b5"
+
 # PRIVATE KEYS
 private_key_1_ganache = "0d4023fc8687f1f61115eb0c6b36513985f446b6231e57c7443a960d7d5eda18"
 private_key_2_ganache = "86d3dcf5ab1c7115362ef181979209f4b3baba74ae135f5f2a2eeed3156864ac"
