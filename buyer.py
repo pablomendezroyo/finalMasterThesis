@@ -28,7 +28,7 @@ class Buyer:
         print("current balance: ", balance)
         print(address_account_1, private_key_1, self.amount_kw*self.price_max_kwh)
         if(balance < self.amount_kw*self.price_max_kwh):
-            set_Money(self.amount_kw*self.price_max_kwh - float(balance))
+            set_Money(address_account_1, private_key_1, self.amount_kw*self.price_max_kwh - float(balance))
             updated_balance = get_balance_received(address_account_1)
             print("updated balance: ", updated_balance)
             return updated_balance

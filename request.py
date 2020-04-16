@@ -82,6 +82,7 @@ def main():
     transaction1 = Request()
     print(transaction1)
     print(transaction1.price)
+    
 
 if __name__ == '__main__':
     main()

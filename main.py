@@ -5,7 +5,7 @@ from seller import Seller
 from buyer import Buyer
 from Interact_with_real_smart_contr import set_Buyer, set_Seller
 from thread_event import myThread
-from config import topic_account_1, topic_account_2
+from config import topic_account_1, topic_account_2, address_account_1, private_key_1
 
 STATUS = ""
 
@@ -17,7 +17,7 @@ while(1):
     if(battery_level < battery_level_min):
         buyer = Buyer(battery_level)
         print(buyer)
-        set_Buyer(buyer.amount_kw, buyer.price_max_kwh)
+        set_Buyer(address_account_1, private_key_1, buyer.amount_kw, buyer.price_max_kwh)
 
         STATUS = 'BUYER'
 
@@ -34,7 +34,7 @@ while(1):
 
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
-        set_Seller(seller.amount_min_kw, seller.amount_mak_kw, seller.price_min_kwh)
+        set_Seller(address_account_1, private_key_1, seller.amount_min_kw, seller.amount_mak_kw, seller.price_min_kwh)
 
         STATUS = 'SELLER'
         
@@ -48,4 +48,4 @@ while(1):
         print("Battery Level: ", battery_level)
         STATUS = ""
     
-    time.sleep(30)
+    time.sleep(60)
