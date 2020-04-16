@@ -120,15 +120,13 @@ def listen_to_events(_topic_buyer, _topic_seller):
         print(event_filter)
         event_list = event_filter.get_all_entries()
         print(event_list)
+
         if(len(event_list) > 0):
             print("NEW EVENT")
             for k1, v1 in event_list[0].items():
                 if(k1 == 'data'):
-                    print("length of v1: ", len(v1))
                     amount_kw = int(v1[:66], 16)
-                    print(amount_kw)
                     total_money = int(v1[67:], 16)
-                    print(total_money)
                 
                 if(k1 == 'topics'):
                     topic_buyer = v1[1].hex()
@@ -136,6 +134,7 @@ def listen_to_events(_topic_buyer, _topic_seller):
             
             if(_topic_buyer == topic_buyer or _topic_seller == topic_seller):
                 print("EVENT FOUND!")
+                print("Amount kw: {}, total money: {}".format(amount_kw, total_money))
                 return amount_kw, total_money
                     
         elif(len(event_list) == 0):
@@ -149,8 +148,7 @@ def get_latest_block():
 
 ## MAIN ##
 def main(): 
-    amount_kw, total_money = listen_to_events(None,topic_account_2)
-    print("Amount kw: {}, total money: {}".format(amount_kw, total_money))
+    pass
     
 
 if __name__ == '__main__':
