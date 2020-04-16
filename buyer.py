@@ -6,6 +6,7 @@ class Buyer:
 
     # batteryLevel
     def __init__(self, battery_Level):
+        self.battery_level = battery_Level
         self.amount_kw =self.set_amount_kw()
         self.price_max_kwh = self.set_Price()
         self.balance = self._get_balance()
@@ -19,7 +20,7 @@ class Buyer:
         return actual_price + 2
 
     def set_amount_kw(self):
-        amount = 0.002
+        amount = 50 - self.battery_level
         return amount
 
     def _get_balance(self):
@@ -36,7 +37,7 @@ class Buyer:
             return balance
 
 def main():
-    buyer = Buyer(1)
+    buyer = Buyer(11)
     print(buyer)
 
 if __name__ == '__main__':
