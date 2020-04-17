@@ -17,8 +17,6 @@ class Request:
         # datetime object containing current date and time
         now = datetime.now()
 
-        #print("now =", now)
-
         # dd/mm/YY H:M:S
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         day_month_year = now.strftime("%Y-%m-%d")
@@ -41,41 +39,44 @@ class Request:
         return start_date, end_date
 
     def get_request(self, start_date, end_date):
-
-        #start_date, end_date = get_current_time()
         time_trunc = "time_trunc=hour"
 
         url = "https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real?{}&{}&{}".format(start_date, end_date, time_trunc)
         #print("URL:",url)
 
-        response = requests.get(url)
-        data = response.json()
+        try:
+            r = requests.get(url,timeout=3)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as errh:
+            print ("Http Error:",errh)
+        except requests.exceptions.ConnectionError as errc:
+            print ("Error Connecting:",errc)
+        except requests.exceptions.Timeout as errt:
+            print ("Timeout Error:",errt)
+        except requests.exceptions.RequestException as err:
+            print ("OOps: Something Else",err)
+
+        #response = requests.get(url)
+        data = r.json()
         #print(data)
         return data
 
     def parse_json(self, json_file):
-        #print("attemp to parse")
-
         for k1, v1 in json_file.items():
-            #print(k1)
             if(k1 == 'included'):
                 for i in v1:
-                    #print(i)
                     a = False
                     for k3, v3 in i.items():
                         if((k3 == 'type') and (v3 == 'Precio mercado spot (€/MWh)')):
-                            #print(k3,v3)
                             a = True
                         elif((k3 == 'type') and (v3 != 'Precio mercado spot (€/MWh)')):
                             a = False
                         if (a == True and k3 == 'attributes'):
                             for k4, v4 in v3.items():
                                 if(k4 == 'values'):
-                                    #print(v4)
                                     for j in v4:
                                         for k5, v5 in j.items():
                                             if(k5 == 'value'):
-                                                #self.items.append(v5)
                                                 return v5
 
 def main():
