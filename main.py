@@ -10,7 +10,7 @@ from config import topic_account_1, topic_account_2, address_account_1, private_
 STATUS = ""
 
 while(1):
-    battery_level = 11
+    battery_level = 81
     battery_level_min = 20
     battery_level_max = 80
 
@@ -32,11 +32,11 @@ while(1):
         my_amount_kw = my_queue.get_nowait()
         my_total_money = my_queue.get_nowait()
         print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
-
-
+        battery_level += my_amount_kw
 
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
+        print(seller)
         set_Seller(address_account_1, private_key_1, seller.amount_min_kw, seller.amount_mak_kw, seller.price_min_kwh)
 
         STATUS = 'SELLER'

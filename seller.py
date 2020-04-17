@@ -6,6 +6,7 @@ class Seller:
     
     # batteryLevel
     def __init__(self, batteryLevel):
+        self.batteryLevel = batteryLevel
         self.amount_min_kw, self.amount_max_kw = self.set_amounts() 
         self.price_min_kwh = self.set_Price()
 
@@ -13,8 +14,8 @@ class Seller:
         return "SELLER: amount_min_kw = {}, amount_max_kw = {}, price_min_kwh = {}".format(self.amount_min_kw, self.amount_max_kw, self.price_min_kwh)
 
     def set_amounts(self):
-        _amount_min_kw = 1
-        _amount_max_kw = 3
+        _amount_min_kw = self.batteryLevel - 60
+        _amount_max_kw = self.batteryLevel - 55
         return _amount_min_kw, _amount_max_kw
     
     def set_Price(self):
