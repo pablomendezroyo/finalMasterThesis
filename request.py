@@ -1,3 +1,4 @@
+import time
 import requests
 from datetime import datetime
 import json
@@ -44,18 +45,24 @@ class Request:
         url = "https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real?{}&{}&{}".format(start_date, end_date, time_trunc)
         #print("URL:",url)
 
-        try:
-            r = requests.get(url,timeout=3)
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as errh:
-            print ("Http Error:",errh)
-        except requests.exceptions.ConnectionError as errc:
-            print ("Error Connecting:",errc)
-        except requests.exceptions.Timeout as errt:
-            print ("Timeout Error:",errt)
-        except requests.exceptions.RequestException as err:
-            print ("OOps: Something Else",err)
+        while(1):
+            try:
+                r = requests.get(url,timeout=3)
+                status = r.raise_for_status()
+                if(status == None):
+                    break
+                else:
+                    time.sleep(1)
 
+            except requests.exceptions.HTTPError as errh:
+                print ("Http Error:",errh)
+            except requests.exceptions.ConnectionError as errc:
+                print ("Error Connecting:",errc)
+            except requests.exceptions.Timeout as errt:
+                print ("Timeout Error:",errt)
+            except requests.exceptions.RequestException as err:
+                print ("OOps: Something Else",err)
+            
         #response = requests.get(url)
         data = r.json()
         #print(data)
@@ -84,6 +91,5 @@ def main():
     print(transaction1)
     print(transaction1.price)
     
-
 if __name__ == '__main__':
     main()
