@@ -3,7 +3,6 @@ from config import address_account_1, private_key_1
 
 
 class Seller:
-    
     # batteryLevel
     def __init__(self, batteryLevel):
         self.batteryLevel = batteryLevel
@@ -15,7 +14,7 @@ class Seller:
 
     def set_amounts(self):
         _amount_min_kw = self.batteryLevel - 60
-        _amount_max_kw = self.batteryLevel - 55
+        _amount_max_kw = self.batteryLevel - 50
         return _amount_min_kw, _amount_max_kw
     
     def set_Price(self):
