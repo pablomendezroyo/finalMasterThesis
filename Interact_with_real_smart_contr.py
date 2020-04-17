@@ -67,7 +67,7 @@ def set_Buyer(_address_account, _private_key, _amount_kw, _price_max_kwh):
     nonce = web3.eth.getTransactionCount(_address_account)
 
     construct_txn = contract.functions.setBuyer(
-        _amount_kw, _price_max_kwh).buildTransaction({
+        int(_amount_kw), int(_price_max_kwh)).buildTransaction({
             'gas': 1000000,
             'gasPrice': web3.toWei('1', 'gwei'),
             'from': _address_account,
@@ -107,8 +107,9 @@ def get_balance_received(_address_account):
 
 
 ## EVENTS ##
-def listen_to_events(_topic_buyer, _topic_seller):
-    from_block = get_latest_block()
+def listen_to_events(_topic_buyer, _topic_seller, _out_qeue):
+    #from_block = get_latest_block()
+    from_block = 2536028
     while(1):
         event_filter = web3.eth.filter({
             "fromBlock": from_block, 
@@ -134,6 +135,8 @@ def listen_to_events(_topic_buyer, _topic_seller):
             if(_topic_buyer == topic_buyer or _topic_seller == topic_seller):
                 print("EVENT FOUND!")
                 print("Amount kw: {}, total money: {}".format(amount_kw, total_money))
+                _out_qeue.put_nowait(amount_kw)
+                _out_qeue.put_nowait(total_money)
                 return amount_kw, total_money
                     
         elif(len(event_list) == 0):

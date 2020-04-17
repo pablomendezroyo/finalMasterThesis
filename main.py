@@ -24,13 +24,16 @@ while(1):
         #Qeue
         my_queue = queue.Queue()
         # Create new threads
-        thread1 = myThread(topic_account_1, None)
+        thread1 = myThread(topic_account_1, None, my_queue)
         # Start new Threads
         thread1.start()
         thread1.join()
         # Data from threads in qeue
-        my_data = my_queue.get()
-        print(my_data)
+        my_amount_kw = my_queue.get_nowait()
+        my_total_money = my_queue.get_nowait()
+        print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
+
+
 
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
@@ -38,11 +41,17 @@ while(1):
 
         STATUS = 'SELLER'
         
+        #Qeue
+        my_queue = queue.Queue()
         # Create new threads
-        thread1 = myThread(None, topic_account_1)
+        thread1 = myThread(None, topic_account_1, my_queue)
         # Start new Threads
         thread1.start()
         thread1.join()
+        # Data from threads in qeue
+        my_amount_kw = my_queue.get_nowait()
+        my_total_money = my_queue.get_nowait()
+        print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
 
     else:
         print("Battery Level: ", battery_level)

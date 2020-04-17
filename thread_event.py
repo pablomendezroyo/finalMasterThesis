@@ -5,14 +5,15 @@ from config import topic_account_1, topic_account_2
 
 
 class myThread (threading.Thread):
-   def __init__(self, _topic_buyer, _topic_seller):
+   def __init__(self, _topic_buyer, _topic_seller, _out_qeue):
       threading.Thread.__init__(self)
       self._topic_buyer = _topic_buyer
       self._topic_seller = _topic_seller
+      self._out_qeue = _out_qeue
 
    def run(self):
       print("Starting ")
-      listen_to_events(self._topic_buyer, self._topic_seller)
+      listen_to_events(self._topic_buyer, self._topic_seller, self._out_qeue)
       print("Exiting ")
 
 
