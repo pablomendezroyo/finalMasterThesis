@@ -37,7 +37,7 @@ while(1):
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
         print(seller)
-        set_Seller(address_account_1, private_key_1, seller.amount_min_kw, seller.amount_mak_kw, seller.price_min_kwh)
+        set_Seller(address_account_1, private_key_1, seller.amount_min_kw, seller.amount_max_kw, seller.price_min_kwh)
 
         STATUS = 'SELLER'
         
@@ -52,6 +52,7 @@ while(1):
         my_amount_kw = my_queue.get_nowait()
         my_total_money = my_queue.get_nowait()
         print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
+        battery_level -= my_amount_kw
 
     else:
         print("Battery Level: ", battery_level)
