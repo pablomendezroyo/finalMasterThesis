@@ -1,11 +1,11 @@
 import time
 import queue
 
-from seller import Seller
-from buyer import Buyer
-from Interact_with_real_smart_contr import set_Buyer, set_Seller
-from thread_event import myThread
-from config import topic_account_1, topic_account_2, address_account_1, private_key_1
+from backend.classes.seller import Seller
+from backend.classes.buyer import Buyer
+from backend.smartContract_Interaction.Interact_with_real_smart_contr import set_Buyer, set_Seller
+from backend.threads.thread_event import myThread
+from backend.config import topic_account_1, topic_account_2, address_account_1, private_key_1
 
 STATUS = ""
 

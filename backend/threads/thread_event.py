@@ -1,7 +1,7 @@
 import threading
 import time
-from Interact_with_real_smart_contr import listen_to_events
-from config import topic_account_1, topic_account_2
+from backend.smartContract_Interaction.Interact_with_real_smart_contr import listen_to_events
+from backend.config import topic_account_1, topic_account_2
 
 
 class myThread (threading.Thread):

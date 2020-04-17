@@ -1,7 +1,7 @@
 import json
 import time
 from web3 import Web3
-from config import address_account_1, address_account_2, private_key_1, private_key_2, topic_account_1, topic_account_2, address_contract
+from backend.config import address_account_1, address_account_2, private_key_1, private_key_2, topic_account_1, topic_account_2, address_contract
 
 #infura_url = "https://goerli.infura.io/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
 websocket = "wss://goerli.infura.io/ws/v3/21eb6a6c17fc415eb9f4cf08d91f9f93"
