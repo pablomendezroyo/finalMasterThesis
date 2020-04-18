@@ -1,23 +1,48 @@
 import pandas as pd
 import pymysql
-import sshtunnel
+import pymysql.cursors
 
 
-host='database-smartcontract.cwi83idjai0q.eu-west-3.rds.amazonaws.com'
-port=3306
-db='database-smartcontract'
-user='admin'
-password='energysmart66'
+connection = pymysql.connect(host='pythondb.cwi83idjai0q.eu-west-3.rds.amazonaws.com',
+                             user='admin',
+                             password='Telefonista1',
+                             port=int(3306),
+                             db='prueba',
+                             cursorclass=pymysql.cursors.DictCursor)
 
-with sshtunnel.SSHTunnelForwarder(
-    ('ssh.pythonanywhere.com'),
-    ssh_username='your PythonAnywhere username', ssh_password='the password you use to log in to the PythonAnywhere website',
-    remote_bind_address=('your PythonAnywhere database hostname, eg. yourusername.mysql.pythonanywhere-services.com', 3306)
-) as tunnel:
-    connection = mysql.connector.connect(
-        user='your PythonAnywhere username', password='your PythonAnywhere database password',
-        host='127.0.0.1', port=tunnel.local_bind_port,
-        database='your database name, eg yourusername$mydatabase',
-    )
-    # Do stuff
+print(connection)
+
+try:
+
+    # Create a cursor object
+    cursorObject = connection.cursor()                                     
+
+    # SQL query string
+    #sqlQuery = "CREATE TABLE Transactions(Buyer varchar(32), Seller varchar(32), Amount_KW int, Total_value int)"   
+
+    # Execute the sqlQuery
+    #cursorObject.execute(sqlQuery)
+
+    # SQL query string
+    #sqlQuery = "SHOW TABLE STATUS"  
+    sqlQuery = "SHOW COLUMNS FROM Transactions"  
+
+    # Execute the sqlQuery
+    cursorObject.execute(sqlQuery)
+
+    #Fetch all the rows
+    rows = cursorObject.fetchall()
+
+    for row in rows:
+
+        print(row)
+
+except Exception as e:
+
+    print("Exeception occured:{}".format(e))
+
+finally:
+
     connection.close()
+
+
