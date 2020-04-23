@@ -1,0 +1,1 @@
+ssh -i C:\Users\mende\Desktop\TFM\tf\keys\key_pair_instance.pem ubuntu@ec2-52-212-254-15.eu-west-1.compute.amazonaws.com
