@@ -12,7 +12,7 @@ address_contract = "0xD7a1e535275F9C28161b4aB8D6A2e437d1008e93"
 abi = json.loads('[	{		"anonymous": false,		"inputs": [			{				"indexed": false,				"internalType": "bool",				"name": "_status",				"type": "bool"			}		],		"name": "matchFound",		"type": "event"	},	{		"inputs": [],		"name": "sendMoney",		"outputs": [],		"stateMutability": "payable",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_price_max_kwh",				"type": "uint256"			}		],		"name": "setBuyer",		"outputs": [],		"stateMutability": "nonpayable",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "_price_min_kwh",				"type": "uint256"			}		],		"name": "setSeller",		"outputs": [],		"stateMutability": "nonpayable",		"type": "function"	},	{		"anonymous": false,		"inputs": [			{				"indexed": true,				"internalType": "address",				"name": "_buyer",				"type": "address"			},			{				"indexed": true,				"internalType": "address",				"name": "_seller",				"type": "address"			},			{				"indexed": false,				"internalType": "uint256",				"name": "_amount_kw",				"type": "uint256"			},			{				"indexed": false,				"internalType": "uint256",				"name": "_price",				"type": "uint256"			}		],		"name": "transactionDone",		"type": "event"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "balanceReceived",		"outputs": [			{				"internalType": "uint256",				"name": "totalBalance",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "numPayments",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "buyer",		"outputs": [			{				"internalType": "address",				"name": "addressBuyer",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_max_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "_amountInWei",				"type": "uint256"			}		],		"name": "convertWeiToEther",		"outputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"stateMutability": "pure",		"type": "function"	},	{		"inputs": [],		"name": "getBalance",		"outputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"name": "Offers_Buyer_Array",		"outputs": [			{				"internalType": "address",				"name": "addressBuyer",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_max_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "uint256",				"name": "",				"type": "uint256"			}		],		"name": "Offers_Seller_Array",		"outputs": [			{				"internalType": "address payable",				"name": "addressSeller",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_min_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	},	{		"inputs": [			{				"internalType": "address",				"name": "",				"type": "address"			}		],		"name": "seller",		"outputs": [			{				"internalType": "address payable",				"name": "addressSeller",				"type": "address"			},			{				"internalType": "uint256",				"name": "amount_min_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "amount_max_kw",				"type": "uint256"			},			{				"internalType": "uint256",				"name": "price_min_kwh",				"type": "uint256"			}		],		"stateMutability": "view",		"type": "function"	}]')
 contract = web3.eth.contract(address = address_contract, abi = abi)
 
-
+NUMBER_TRANSACTIONS = 0
 
 def establish_connection():
     connection = pymysql.connect(host='pythondb.cwi83idjai0q.eu-west-3.rds.amazonaws.com',
@@ -53,9 +53,10 @@ def write_db(connection, _buyer, _seller, _amountkw, _total_value):
     try:
         # Create a cursor object
         cursorObject = connection.cursor()                                     
+        if(NUMBER_TRANSACTIONS == 0):
+            sqlQuery = "CREATE TABLE Transactions(Buyer varchar(32), Seller varchar(32), Amount_KW int, Total_value int)"
+            cursorObject.execute(sqlQuery)
 
-        # SQL query string
-        #sqlQuery = "CREATE TABLE Transactions(Buyer varchar(32), Seller varchar(32), Amount_KW int, Total_value int)"   
         sqlQuery = "INSERT INTO Transactions(Buyer, Seller, Amount_KW, Total_value) VALUES (\"{}\", \"{}\", {}, {});".format(_buyer, _seller, _amountkw, _total_value)
 
         # Execute the sqlQuery
@@ -68,7 +69,7 @@ def write_db(connection, _buyer, _seller, _amountkw, _total_value):
         print("Exeception occured:{}".format(e))
 
     finally:
-
+        NUMBER_TRANSACTIONS = NUMBER_TRANSACTIONS + 1
         connection.close()
 
 def get_latest_block():
@@ -77,13 +78,13 @@ def get_latest_block():
 
 def listen_to_events():
     while(1):
-        from_block = get_latest_block()
+        #from_block = get_latest_block()
+        from_block = 2576150
         event_filter = web3.eth.filter({
             "fromBlock": from_block, 
             "toBlock": 'latest', 
-            "address": address_contract, })
-            # First item is the hash of event name, Second is the buyer, Third is the seller 0x00000000000000000000000061d38805c04c8cb9b5d71bdafad874fa2ac091d3
-            #"topics": [None, _topic_buyer, _topic_seller]})
+            "address": address_contract})
+            
         print(event_filter)
         event_list = event_filter.get_all_entries()
         print(event_list)
@@ -97,20 +98,19 @@ def listen_to_events():
                 
                 if(k1 == 'topics'):
                     topic_buyer = v1[1].hex()
-                    buyer = topic_buyer[]
+                    buyer = "0x" + topic_buyer[26:]
                     topic_seller = v1[2].hex()
-            print("Buyer: {}, Seller: {}".format(topic_buyer, topic_seller))
+                    seller = "0x" + topic_seller[26:]
+            print("Buyer: {}, Seller: {}".format(buyer, seller))
             print("Amount kw: {}, total money: {}".format(amount_kw, total_money))
+            connection = establish_connection()
+            write_db(connection, buyer, seller, amount_kw, total_money)
                     
         elif(len(event_list) == 0):
             print("NO NEW EVENTS YET")
         time.sleep(3)
 
-
 def main():
-    #_connection = establish_connection()
-    #write_db(_connection)
-    #read_db(_connection)
     listen_to_events()
 
 if __name__ == '__main__':
