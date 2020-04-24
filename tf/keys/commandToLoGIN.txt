@@ -1,1 +1,7 @@
+
+CONNECT TO EC2
 ssh -i C:\Users\mende\Desktop\TFM\tf\keys\key_pair_instance.pem ubuntu@ec2-52-212-254-15.eu-west-1.compute.amazonaws.com
+
+	INSIDE EC2 CONNECT TO MYSQL
+		sudo install mysql-core-5.7
+		mysql -h pythondb.cc3yi0ztmyaq.eu-west-1.rds.amazonaws.com -p 3306 -u foo -p foobarbaz

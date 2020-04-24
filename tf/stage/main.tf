@@ -2,7 +2,6 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-
 ## VPC
 resource "aws_vpc" "main" {
   cidr_block       = "10.0.0.0/16"
@@ -14,27 +13,21 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 }
 
-## Route Table
-resource "aws_route_table" "r" {
+## Route Table1 associated to gateway
+resource "aws_route_table" "r1" {
   vpc_id = aws_vpc.main.id
-
+  
+  # Route for internet gateway
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
 }
 
-## Route table association
+## Route table association r1 (gateway to ec2)
 resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.instanceSubnet.id
-  route_table_id = aws_route_table.r.id
-}
-
-## Subnet rds1
-resource "aws_subnet" "rdsSubnetone" {
-  availability_zone = "eu-west-1a"
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
+  subnet_id      = aws_subnet.ec2-mysql-Subnet.id
+  route_table_id = aws_route_table.r1.id
 }
 
 ## Subnet rds2
@@ -47,11 +40,12 @@ resource "aws_subnet" "rdsSubnettwo" {
 ## Final subnet rds
 resource "aws_db_subnet_group" "rdsSubnet" {
   name       = "main_subnet"
-  subnet_ids = ["${aws_subnet.rdsSubnetone.id}", "${aws_subnet.rdsSubnettwo.id}"]
+  subnet_ids = ["${aws_subnet.ec2-mysql-Subnet.id}", "${aws_subnet.rdsSubnettwo.id}"]
 }
 
-## Subnet ec2
-resource "aws_subnet" "instanceSubnet" {
+## Subnet ec2-mysql
+resource "aws_subnet" "ec2-mysql-Subnet" {
+  availability_zone = "eu-west-1a"
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.3.0/24"
 }
@@ -69,18 +63,18 @@ resource "aws_db_instance" "rds" {
   password             = "foobarbaz"
   parameter_group_name = "default.mysql5.7"
   skip_final_snapshot  = true
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = [aws_security_group.ec2-mysql.id]
   db_subnet_group_name = aws_db_subnet_group.rdsSubnet.id
 }
 
 ## EC2
 resource "aws_instance" "ec2"{
-    ami                         = "ami-0f2ed58082cb08a4d"
-    instance_type               = "t2.micro"
-    key_name                    = "key_pair_instance"
-    associate_public_ip_address = true
-    vpc_security_group_ids      = [aws_security_group.instance.id]
-    subnet_id                   = aws_subnet.instanceSubnet.id
+  ami                         = "ami-0f2ed58082cb08a4d"
+  instance_type               = "t2.micro"
+  key_name                    = "key_pair_instance"
+  associate_public_ip_address = true
+  vpc_security_group_ids      = [aws_security_group.ec2-mysql.id]
+  subnet_id                   = aws_subnet.ec2-mysql-Subnet.id
 }
 
 resource "aws_eip" "elasticip" {
@@ -100,11 +94,9 @@ resource "tls_private_key" "privateKey" {
 }*/
 
 ## Security Group ec2
-resource "aws_security_group" "instance"{
-  name = "security_group_instance"
+resource "aws_security_group" "ec2-mysql"{
+  name = "security_group_ec2-mysql"
   vpc_id = aws_vpc.main.id
-
-  ##need to put the rds 
 
   ingress {
     from_port   = 22
@@ -130,6 +122,14 @@ resource "aws_security_group" "instance"{
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress{
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    description = "Mysql"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # Allow all outbound traffic.
   egress {
     from_port   = 0
@@ -139,27 +139,9 @@ resource "aws_security_group" "instance"{
   }
 }
 
-## Security Group db
-resource "aws_security_group" "rds"{
-  name = "security_group_rds"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-      from_port = 0
-      to_port = 65535
-      protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-      from_port = 0
-      to_port = 65535
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-}
-}
-
 output "public_ip" {
   value       = aws_instance.ec2.public_ip
   description = "the public ip of the server"
 }
+
+## put as outputs the endpoints
