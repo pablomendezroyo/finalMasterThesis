@@ -75,6 +75,11 @@ resource "aws_db_instance" "rds" {
   db_subnet_group_name = aws_db_subnet_group.rdsSubnet.id
 }
 
+## Template file
+resource "template_file" "python-script" {
+    template = "ec2write.py"
+}
+
 ## EC2
 resource "aws_instance" "ec2"{
   ami                         = "ami-0f2ed58082cb08a4d"
@@ -83,6 +88,8 @@ resource "aws_instance" "ec2"{
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.ec2-mysql.id]
   subnet_id                   = aws_subnet.ec2-mysql-Subnet.id
+
+  //user_data                   = "${template_file.python-script.rendered}"
 }
 
 resource "aws_eip" "elasticip" {

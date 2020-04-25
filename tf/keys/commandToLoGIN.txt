@@ -1,7 +1,13 @@
-
 CONNECT TO EC2
 ssh -i C:\Users\mende\Desktop\TFM\tf\keys\key_pair_instance.pem ubuntu@ec2-52-212-254-15.eu-west-1.compute.amazonaws.com
 
 	INSIDE EC2 CONNECT TO MYSQL
 		sudo install mysql-core-5.7
 		mysql -h pythondb.cc3yi0ztmyaq.eu-west-1.rds.amazonaws.com -p 3306 -u foo -p foobarbaz
+
+
+GIVE FILE PYTHON SCRIPT AND COPY IT INTO A FOLDER
+
+	scp -i C:/Users/mende/Desktop/TFM/tf/keys/key_pair_instance.pem C:/Users/mende/Desktop/TFM/tf/stage/ec2write.py ubuntu@ec2-108-128-213-113.eu-west-1.compute.amazonaws.com:~/code.py
+
+INSTALL PYTHON LIBRARIES - BASH CODE
