@@ -14,20 +14,26 @@ resource "aws_internet_gateway" "gw" {
 }
 
 ## Route Table1 associated to gateway
-resource "aws_route_table" "r1" {
+resource "aws_route_table" "igw" {
   vpc_id = aws_vpc.main.id
-  
-  # Route for internet gateway
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.gw.id}"
-  }
+}
+
+resource "aws_route" "r1"{
+  route_table_id = aws_route_table.igw.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.gw.id
 }
 
 ## Route table association r1 (gateway to ec2)
 resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.ec2-mysql-Subnet.id
-  route_table_id = aws_route_table.r1.id
+  route_table_id = aws_route_table.igw.id
+}
+
+## Route table association r2 (gateway to rds)
+resource "aws_route_table_association" "b" {
+  subnet_id      = aws_subnet.rdsSubnettwo.id
+  route_table_id = aws_route_table.igw.id
 }
 
 ## Subnet rds2
@@ -62,7 +68,9 @@ resource "aws_db_instance" "rds" {
   username             = "foo"
   password             = "foobarbaz"
   parameter_group_name = "default.mysql5.7"
+  port                 = 3306
   skip_final_snapshot  = true
+  publicly_accessible  = true
   vpc_security_group_ids = [aws_security_group.ec2-mysql.id]
   db_subnet_group_name = aws_db_subnet_group.rdsSubnet.id
 }
