@@ -1,5 +1,5 @@
-web3py
-threaded
-pandas
-pymysql
-sshtunnel
+web3==5.7.0
+threaded==4.0.8
+pandas==1.0.1
+PyMySQL==0.9.3
+requests==2.20.1
