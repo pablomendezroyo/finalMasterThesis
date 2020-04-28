@@ -15,11 +15,11 @@ contract = web3.eth.contract(address = address_contract, abi = abi)
 NUMBER_TRANSACTIONS = 0
 
 def establish_connection():
-    connection = pymysql.connect(host='pythondb.cwi83idjai0q.eu-west-3.rds.amazonaws.com',
-                                user='admin',
-                                password='Telefonista1',
+    connection = pymysql.connect(host='pythondb.cc3yi0ztmyaq.eu-west-1.rds.amazonaws.com',
+                                user='foo',
+                                password='foobarbaz',
                                 port=int(3306),
-                                db='prueba',
+                                db='mydb',
                                 cursorclass=pymysql.cursors.DictCursor)
     return connection
 
@@ -50,6 +50,7 @@ def read_db(connection):
         connection.close()
 
 def write_db(connection, _buyer, _seller, _amountkw, _total_value):
+    global NUMBER_TRANSACTIONS
     try:
         # Create a cursor object
         cursorObject = connection.cursor()                                     
