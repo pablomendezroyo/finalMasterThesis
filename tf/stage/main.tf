@@ -89,18 +89,18 @@ resource "aws_instance" "ec2"{
   vpc_security_group_ids      = [aws_security_group.ec2-mysql.id]
   subnet_id                   = aws_subnet.ec2-mysql-Subnet.id
 
-  user_data                   = "<< EOF
-    #! /bin/bash
-      sudo apt-get update
-      //sudo apt-get upgrade
-      sudo apt install python3-pip
-      pip3 install --upgrade pip
-      pip3 install web3==5.7.0
-      pip3 install threaded==4.0.8
-      pip3 install pandas==1.0.1
-      pip3 install PyMySQL==0.9.3
-      pip3 install requests==2.20.1
-    EOF"
+  user_data                   = <<-EOF
+                                #!/bin/bash
+                                sudo apt-get update
+                                sudo apt-get upgrade -y
+                                sudo apt install python3-pip -y
+                                pip3 install --upgrade pip
+                                pip3 install web3==5.7.0
+                                pip3 install threaded==4.0.8
+                                pip3 install pandas==1.0.1
+                                pip3 install PyMySQL==0.9.3
+                                pip3 install requests==2.20.1
+                                EOF
 }
 
 resource "aws_eip" "elasticip" {
