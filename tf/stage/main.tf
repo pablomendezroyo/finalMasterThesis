@@ -171,3 +171,13 @@ output "public_ip" {
 }
 
 ## put as outputs the endpoints
+
+output "rds_endpoint"{
+  value = aws_db_instance.rds.endpoint
+  description = "the endpoint of the database to connect to it."
+}
+
+output "host_ec2" {
+  value       = aws_instance.ec2.public_dns
+  description = "the dns of the ec2 to connect to it"
+}
