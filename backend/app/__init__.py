@@ -10,9 +10,13 @@ from backend.config import topic_account_1, topic_account_2, address_account_1, 
 STATUS = ""
 
 while(1):
-    battery_level = 81
+
+    print("Insert battery Level: ")
+    battery_level = int(input())
     battery_level_min = 20
     battery_level_max = 80
+
+    print("Battery level: {}, battery max level: {}, battery min level: {}".format(battery_level, battery_level_max, battery_level_min))
 
     if(battery_level < battery_level_min):
         buyer = Buyer(battery_level)
