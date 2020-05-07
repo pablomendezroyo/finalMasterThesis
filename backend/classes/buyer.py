@@ -1,6 +1,6 @@
-from backend.request.request import Request
-from backend.smartContract_Interaction.Interact_with_real_smart_contr import set_Money, get_balance_received
-from backend.config import address_account_1, private_key_1
+from request.request import Request
+from smartContract_Interaction.Interact_with_real_smart_contr import set_Money, get_balance_received
+from config import address_account_1, private_key_1
 
 class Buyer:
 

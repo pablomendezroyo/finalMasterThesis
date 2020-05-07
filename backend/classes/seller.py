@@ -1,5 +1,5 @@
-from backend.request.request import Request
-from backend.config import address_account_1, private_key_1
+from request.request import Request
+from config import address_account_1, private_key_1
 
 class Seller:
     # batteryLevel
