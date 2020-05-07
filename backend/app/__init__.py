@@ -1,11 +1,17 @@
 import time
 import queue
+import RPi.GPIO as GPIO
 
 from classes.seller import Seller
 from classes.buyer import Buyer
 from smartContract_Interaction.Interact_with_real_smart_contr import set_Buyer, set_Seller
 from threads.thread_event import myThread
 from config import topic_account_1, topic_account_2, address_account_1, private_key_1
+
+GPIO.setmode(GPIO.BCM) # GPIO Numbers instead of board numbers
+RELAIS_1_GPIO = 17
+GPIO.setup(RELAIS_1_GPIO, GPIO.OUT) # GPIO Assign mode (starts in low)
+
 
 STATUS = ""
 
@@ -36,6 +42,9 @@ while(1):
         my_amount_kw = my_queue.get_nowait()
         my_total_money = my_queue.get_nowait()
         print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
+        GPIO.output(RELAIS_1_GPIO, GPIO.HIGH) # on
+        time.sleep(4)
+        GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
         battery_level += my_amount_kw
 
     elif(battery_level > battery_level_max):
@@ -56,6 +65,9 @@ while(1):
         my_amount_kw = my_queue.get_nowait()
         my_total_money = my_queue.get_nowait()
         print("TRANSACTION DONE: Amount_kw = {} , Money interchange = {}".format(my_amount_kw, my_total_money))
+        GPIO.output(RELAIS_1_GPIO, GPIO.HIGH) # on
+        time.sleep(4)
+        GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
         battery_level -= my_amount_kw
 
     else:
