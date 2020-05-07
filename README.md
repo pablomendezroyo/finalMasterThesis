@@ -15,5 +15,17 @@ _To be able to communicate with the smart contract and use its functions, this p
 _To improve this project, there have been developed a terraform code to implement an infraestructure in AWS (amazon web services). This infraestructure is composed by a virtual private cloud (VPC), subnet, internet gateway, route table, amazon instance (EC2), and amazon relational database MySQL (RDS). The idea is that the virtual machine EC2 will write every single transaction that is done in the smart contract. Furthermore, at launch time the EC2 is setup with somre python libraries needed for listening the events in the blockchain network where the smart contract have been deployed._
 
 **Configuration**
+
+1. Rquirements: 
+
 To install the requirements is needed pip3 and an actual version of python3.
 To install the python libraries type: _pip3 install -r requirements.txt_
+
+2. PYTHONPATH:
+
+In order to be able to use the python modules from this project, it is necessary to let know the python environment of the host machine where is the path for this module.
+
+To do that go to the folder where is located backend and type the following command:
+_export PYTHONPATH="PWD"_
+
+This will set the environment variable "PYTHONPATH" with the path of the backend folder, where are located all the modules needed.
