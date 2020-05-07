@@ -22,7 +22,7 @@ class Seller:
         return actual_price - 2
 
 def main():
-    seller = Seller()
+    seller = Seller(98)
     print(seller)
 
 if __name__ == '__main__':

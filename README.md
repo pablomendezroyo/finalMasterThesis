@@ -13,3 +13,7 @@ _To be able to communicate with the smart contract and use its functions, this p
 
 **4 Iac (infraestructure as code) for AWS to implement virtual machine and database using terraform.**
 _To improve this project, there have been developed a terraform code to implement an infraestructure in AWS (amazon web services). This infraestructure is composed by a virtual private cloud (VPC), subnet, internet gateway, route table, amazon instance (EC2), and amazon relational database MySQL (RDS). The idea is that the virtual machine EC2 will write every single transaction that is done in the smart contract. Furthermore, at launch time the EC2 is setup with somre python libraries needed for listening the events in the blockchain network where the smart contract have been deployed._
+
+**Configuration**
+To install the requirements is needed pip3 and an actual version of python3.
+To install the python libraries type: _pip3 install -r requirements.txt_
