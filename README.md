@@ -26,6 +26,6 @@ To install the python libraries type: _pip3 install -r requirements.txt_
 In order to be able to use the python modules from this project, it is necessary to let know the python environment of the host machine where is the path for this module.
 
 To do that go to the folder where is located backend and type the following command:
-_export PYTHONPATH="PWD"_
+_export PYTHONPATH="$PWD"_
 
 This will set the environment variable "PYTHONPATH" with the path of the backend folder, where are located all the modules needed.
