@@ -46,6 +46,8 @@ while(1):
         time.sleep(4)
         GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
         battery_level += my_amount_kw
+        print("New battery level: {}".format(battery_level))
+        print("Going to sleep...")
 
     elif(battery_level > battery_level_max):
         seller = Seller(battery_level)
@@ -69,6 +71,8 @@ while(1):
         time.sleep(4)
         GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
         battery_level -= my_amount_kw
+        print("New battery level: {}".format(battery_level))
+        print("Going to sleep...")
 
     else:
         print("Battery Level: ", battery_level)
