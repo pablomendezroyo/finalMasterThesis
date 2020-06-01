@@ -12,24 +12,17 @@ GPIO.setmode(GPIO.BCM) # GPIO Numbers instead of board numbers
 RELAIS_1_GPIO = 17
 GPIO.setup(RELAIS_1_GPIO, GPIO.OUT) # GPIO Assign mode (starts in low)
 
-
-STATUS = ""
-
 while(1):
 
-    print("Insert battery Level: ")
-    battery_level = int(input())
-    battery_level_min = 20
-    battery_level_max = 80
+    print("Select an option: option 1 - SELL kw, option 2 - BUY kw, option 3 - nothing")
+    option = int(input())
 
-    print("Battery level: {}, battery max level: {}, battery min level: {}".format(battery_level, battery_level_max, battery_level_min))
+    print("Option selected: ", option)
 
-    if(battery_level < battery_level_min):
-        buyer = Buyer(battery_level)
+    if(option == 2):
+        buyer = Buyer()
         print(buyer)
         set_Buyer(address_account_1, private_key_1, buyer.amount_kw, buyer.price_max_kwh)
-
-        STATUS = 'BUYER'
 
         #Qeue
         my_queue = queue.Queue()
@@ -45,16 +38,12 @@ while(1):
         GPIO.output(RELAIS_1_GPIO, GPIO.HIGH) # on
         time.sleep(4)
         GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
-        battery_level += my_amount_kw
-        print("New battery level: {}".format(battery_level))
         print("Going to sleep...")
 
-    elif(battery_level > battery_level_max):
-        seller = Seller(battery_level)
+    elif(option == 1):
+        seller = Seller()
         print(seller)
         set_Seller(address_account_1, private_key_1, seller.amount_min_kw, seller.amount_max_kw, seller.price_min_kwh)
-
-        STATUS = 'SELLER'
         
         #Qeue
         my_queue = queue.Queue()
@@ -70,12 +59,13 @@ while(1):
         GPIO.output(RELAIS_1_GPIO, GPIO.HIGH) # on
         time.sleep(4)
         GPIO.output(RELAIS_1_GPIO, GPIO.LOW) # out
-        battery_level -= my_amount_kw
-        print("New battery level: {}".format(battery_level))
         print("Going to sleep...")
 
-    else:
-        print("Battery Level: ", battery_level)
-        STATUS = ""
+    elif(option == 3):
+        pass
+
     
-    time.sleep(60)
+    else:
+        print("Please, select a correct option")
+    
+    time.sleep(30)

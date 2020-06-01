@@ -5,8 +5,7 @@ from config import address_account_1, private_key_1
 class Buyer:
 
     # batteryLevel
-    def __init__(self, battery_Level):
-        self.battery_level = battery_Level
+    def __init__(self):
         self.amount_kw =self.set_amount_kw()
         self.price_max_kwh = self.set_Price()
         self.balance = self._get_balance()
@@ -17,10 +16,13 @@ class Buyer:
     def set_Price(self):
         request = Request()
         actual_price = request.price
-        return actual_price + 2
+        print("The actual price in the market is: {}, at what price would you want to buy?".format(actual_price))
+        price_to_sell = int(input())
+        return price_to_sell
 
     def set_amount_kw(self):
-        amount = 50 - self.battery_level
+        print("Please, set an amount of kw to buy: ")
+        amount = int(input())
         return amount
 
     def _get_balance(self):

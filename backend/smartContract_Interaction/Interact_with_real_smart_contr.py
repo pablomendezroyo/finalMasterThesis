@@ -31,9 +31,9 @@ def set_Seller(_address_account, _private_key, _amount_min_kw, _amount_max_kw, _
     tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
     tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
 
-    print(construct_txn)
-    print(signed_txn)
-    print(tx_receipt)
+    #print(construct_txn)
+    #print(signed_txn)
+    #print(tx_receipt)
 
     return tx_receipt
 
@@ -53,9 +53,9 @@ def set_Money(_address_account, _private_key, amount):
     tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
     tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
 
-    print(construct_txn)
-    print(signed_txn)
-    print(tx_receipt)
+    #print(construct_txn)
+    #print(signed_txn)
+    #print(tx_receipt)
 
     return tx_receipt
 
@@ -76,9 +76,9 @@ def set_Buyer(_address_account, _private_key, _amount_kw, _price_max_kwh):
     tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
     tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
     
-    print(construct_txn)
-    print(signed_txn)
-    print(tx_receipt)
+    #print(construct_txn)
+    #print(signed_txn)
+    #print(tx_receipt)
 
     return tx_receipt
 
