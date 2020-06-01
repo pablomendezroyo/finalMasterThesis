@@ -1,5 +1,5 @@
 from request.request import Request
-from config import address_account_1, private_key_1
+from config import address_account_1, private_key_1, address_account_2, private_key_2
 
 class Seller:
     # batteryLevel

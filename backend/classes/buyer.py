@@ -1,6 +1,6 @@
 from request.request import Request
 from smartContract_Interaction.Interact_with_real_smart_contr import set_Money, get_balance_received
-from config import address_account_1, private_key_1
+from config import address_account_1, private_key_1, address_account_2, private_key_2
 
 class Buyer:
 

@@ -106,8 +106,8 @@ def get_balance_received(_address_account):
 
 ## EVENTS ##
 def listen_to_events(_topic_buyer, _topic_seller, _out_qeue):
-    #from_block = get_latest_block()
-    from_block = 2536028
+    from_block = get_latest_block()
+    #from_block = 2536028
     while(1):
         event_filter = web3.eth.filter({
             "fromBlock": from_block, 
@@ -115,9 +115,9 @@ def listen_to_events(_topic_buyer, _topic_seller, _out_qeue):
             "address": address_contract, 
             # First item is the hash of event name, Second is the buyer, Third is the seller
             "topics": [None, _topic_buyer, _topic_seller]})
-        print(event_filter)
+        #print(event_filter)
         event_list = event_filter.get_all_entries()
-        print(event_list)
+        #print(event_list)
 
         if(len(event_list) > 0):
             print("NEW EVENT")
